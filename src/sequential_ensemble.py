@@ -32,35 +32,38 @@ class SequentialEnsembleRegressor(BaseEstimator, RegressorMixin):
         - y: vector objetivo (num_samples,)
 
         Proceso:
-        - Inicializa la predicción acumulada como ceros.
-        - Por cada iteración:
-            - Calcula el residuo (error actual)
-            - Extrae una muestra aleatoria sin reemplazo del conjunto de entrenamiento
-            - Entrena un modelo base para predecir el residuo
-            - Actualiza la predicción acumulada con la predicción ponderada del nuevo modelo
+        - Convierte 'y' a un array NumPy para evitar problemas de indexación con pandas.
+        - Inicializa la predicción acumulada como un vector de ceros.
+        - Por cada iteración (n_estimators veces):
+            - Calcula el residuo (error actual entre valores reales y predichos).
+            - Selecciona una muestra aleatoria sin reemplazo del conjunto de entrenamiento para entrenar el modelo base.
+            - Entrena el modelo base para predecir el residuo.
+            - Actualiza la predicción acumulada sumando la predicción ponderada del nuevo modelo.
         """
         n_samples = X.shape[0]
         rng = np.random.default_rng(self.random_state)  # Generador aleatorio reproducible
 
-        pred = np.zeros(n_samples)  # Predicción inicial: todos ceros
-        self.models = []  # Limpiar lista de modelos por si se vuelve a entrenar
+        y = np.array(y)  # Convertir 'y' a numpy array para evitar errores con índices de pandas
+        pred = np.zeros(n_samples)  # Predicción inicial: vector de ceros
+        self.models = []  # Limpiar lista de modelos para entrenamiento desde cero
 
         for i in range(self.n_estimators):
-            residual = y - pred  # Residuo: error actual del ensamble
-            # Selección aleatoria sin reemplazo para entrenar este modelo
+            residual = y - pred  # Residuo: diferencia entre valores reales y predichos
+            # Muestreo aleatorio sin reemplazo para seleccionar subset para entrenar modelo base
             idx = rng.choice(n_samples, int(n_samples * self.sample_size), replace=False)
             X_sample = X[idx]
-            y_sample = residual[idx]
+            y_sample = residual[idx]  # Indexación directa en array numpy sin usar to_numpy()
 
-            # Crear y entrenar el modelo base con la muestra
+            # Crear y entrenar el modelo base con la muestra seleccionada
             model = self.base_estimator(**self.est_params)
             model.fit(X_sample, y_sample)
             self.models.append(model)  # Guardar el modelo entrenado
 
-            # Actualizar la predicción acumulada con la nueva predicción ponderada
+            # Actualizar la predicción acumulada sumando la predicción ponderada del nuevo modelo
             pred += self.lr * model.predict(X)
 
-        return self  # Para permitir encadenar métodos (fit().predict())
+        return self  # Permite encadenar métodos como fit().predict()
+
 
     def predict(self, X):
         """
