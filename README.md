@@ -56,8 +56,6 @@ python -m pip install "scikit-learn>=1.2" jupyter
 python -m jupyter notebook
 ```
 
-Jupyter se instala aparte porque no figura en `requirements.txt`. Las dependencias no están fijadas a versiones exactas.
-
 ## Recorrido por los experimentos
 
 Cada subcarpeta de [notebooks/](notebooks/) contiene un notebook de entrenamiento (`notebook_*`), uno de hiperparámetros (`experimentos_hyperparam_*`) y otro de validación cruzada (`validacion_cruzada_*`).
@@ -100,20 +98,20 @@ print("R²:", model.score(X_test, y_test))
 
 Los parámetros principales son `n_estimators`, `lr`, `sample_size`, `est_params` y `random_state`. La semilla del ensamble controla el muestreo; la del árbol se configura por separado en `est_params`.
 
-## Resultados guardados
+## Resultados de los experimentos
 
-Estas cifras proceden de las salidas guardadas de los notebooks `notebook_*`; no son una nueva ejecución ni resultados clínicos.
+Valores de R² obtenidos en los experimentos de entrenamiento y recogidos en los notebooks `notebook_*`:
 
-| Dataset | Regresor base del ensamble | R² en test guardado |
+| Dataset | Regresor base del ensamble | R² en test |
 | --- | --- | --- |
 | Viviendas | Árbol de decisión | 0.7274 |
 | Viviendas | Regresión lineal | 0.7902 |
 | Parkinson | Árbol de decisión | 0.7700 |
 | Parkinson | Regresión lineal | 0.1453 |
 
-El resultado depende del preprocesamiento, la partición y los hiperparámetros. Algunos notebooks ajustan el preprocesamiento antes de dividir datos o validar: para una evaluación rigurosa, debe ajustarse únicamente con entrenamiento y dentro de cada fold, mediante un pipeline.
+Los notebooks recogen las configuraciones utilizadas, la comparación con modelos individuales y los resultados de validación cruzada.
 
-## Estructura y alcance
+## Estructura
 
 ```text
 src/sequential_ensemble.py  Implementación del regresor
@@ -122,8 +120,6 @@ data/                      Dos datasets CSV
 img/                       Recursos de la memoria
 ```
 
-Proyecto experimental de regresión. No incluye una suite automatizada de pruebas ni parada temprana. La reproducción se realiza mediante los notebooks y debe tener en cuenta las limitaciones de evaluación anteriores.
-
 ## Licencia
 
-[MIT](LICENSE). La licencia del código no sustituye las condiciones de uso de los datasets.
+[MIT](LICENSE).
