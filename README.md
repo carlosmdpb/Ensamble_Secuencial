@@ -2,6 +2,12 @@
 
 Proyecto de aprendizaje automático que implementa un regresor por ensamble: entrena varios modelos en secuencia para que cada uno aprenda a corregir los errores acumulados de los anteriores.
 
+![Python](https://img.shields.io/badge/Python-ML-3776AB?logo=python&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Regresion-F7931E?logo=scikitlearn&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-Calculo-013243?logo=numpy&logoColor=white)
+![pandas](https://img.shields.io/badge/pandas-Datos-150458?logo=pandas&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebooks-F37626?logo=jupyter&logoColor=white)
+
 Se estudia su comportamiento con árboles de decisión y regresión lineal, sobre precios de viviendas y medidas de progresión del Parkinson. El objetivo es comparar configuraciones y comprender cuándo el ensamble mejora un modelo individual.
 
 Trabajo en equipo de Inteligencia Artificial, Universidad de Sevilla, curso 2024/25. Autores: Carlos Martín de Prado Barragán y Marco Padilla Gómez.
